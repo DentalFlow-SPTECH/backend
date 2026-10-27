@@ -3,28 +3,33 @@ package dental.flow.api.domain.user;
 import dental.flow.api.boot.exception.DomainException;
 import dental.flow.api.boot.exception.Failures;
 
+import java.util.Locale;
+
 public class User {
     private Long id;
-    private String nome;
-    private String email;
+    private String name;
+    private String login;
     private String password;
     private Long clinicId;
+    private String accessLevel;
+    private Boolean active;
 
-    public User(String nome, String email, String password, Long clinicId) {
-        if (nome == null || nome.isBlank()) {
+    public User(String name, String login, String password, Long clinicId) {
+        this(name, login, password, clinicId, "ADMIN", true);
+    }
+
+    public User(String name, String login, String password, Long clinicId, String accessLevel, Boolean active) {
+        if (name == null || name.isBlank()) {
             throw new DomainException(Failures.DOMAIN_ERROR, "O nome é obrigatório.");
         }
-        if (nome.length() > 100) {
+        if (name.length() > 100) {
             throw new DomainException(Failures.DOMAIN_ERROR, "O nome deve ter no máximo 100 caracteres.");
         }
-        if (email == null || email.isBlank()) {
-            throw new DomainException(Failures.DOMAIN_ERROR, "O email é obrigatório.");
+        if (login == null || login.isBlank()) {
+            throw new DomainException(Failures.DOMAIN_ERROR, "O login é obrigatório.");
         }
-        if (!email.contains("@") || !email.contains(".")) {
-            throw new DomainException(Failures.DOMAIN_ERROR, "O email é inválido.");
-        }
-        if (email.length() > 100) {
-            throw new DomainException(Failures.DOMAIN_ERROR, "O email deve ter no máximo 100 caracteres.");
+        if (login.length() > 50) {
+            throw new DomainException(Failures.DOMAIN_ERROR, "O login deve ter no máximo 50 caracteres.");
         }
         if (password == null || password.isBlank()) {
             throw new DomainException(Failures.DOMAIN_ERROR, "A senha é obrigatória.");
@@ -36,10 +41,12 @@ public class User {
             throw new DomainException(Failures.DOMAIN_ERROR, "A clínica é obrigatória.");
         }
 
-        this.nome = nome.trim();
-        this.email = email.trim().toLowerCase();
+        this.name = name.trim();
+        this.login = login.trim().toLowerCase(Locale.ROOT);
         this.password = password;
         this.clinicId = clinicId;
+        this.accessLevel = (accessLevel == null || accessLevel.isBlank()) ? "ADMIN" : accessLevel.trim().toUpperCase(Locale.ROOT);
+        this.active = active == null ? true : active;
     }
 
     public Long getId() {
@@ -50,20 +57,20 @@ public class User {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -80,5 +87,21 @@ public class User {
 
     public void setClinicId(Long clinicId) {
         this.clinicId = clinicId;
+    }
+
+    public String getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(String accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

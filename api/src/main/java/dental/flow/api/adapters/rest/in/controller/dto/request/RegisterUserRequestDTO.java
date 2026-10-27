@@ -2,8 +2,10 @@ package dental.flow.api.adapters.rest.in.controller.dto.request;
 
 public record RegisterUserRequestDTO(
         String name,
-        String email,
+        String login,
         String password,
-        Long clinicId
-){
+        Long clinicId,
+        String accessLevel,
+        Boolean active
+) {
 }

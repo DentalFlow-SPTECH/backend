@@ -19,6 +19,11 @@ public enum Failures {
             "BSN001",
             HttpStatus.UNPROCESSABLE_ENTITY,
             "Violação de regra de negócio"
+    ),
+    NOT_FOUND(
+            "NFD001",
+            HttpStatus.NOT_FOUND,
+            "Recurso não encontrado"
     );
 
     private final String code;

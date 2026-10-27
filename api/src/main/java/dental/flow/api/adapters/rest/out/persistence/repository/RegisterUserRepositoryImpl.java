@@ -22,18 +22,15 @@ public class RegisterUserRepositoryImpl implements RegisterUserRepository {
     public String register(User user) {
         try {
             UserEntity entity = UserPersistenceMapper.toEntity(user);
-
             UserEntity saved = userJpaRepository.saveAndFlush(entity);
-
-            System.out.println("ID gerado: " + saved.getId());
-
             return "User id:" + saved.getId() + " registered successfully";
         } catch (DataAccessException e) {
             throw new DatabaseException(Failures.DATABASE_ERROR, "Error registering user: " + e.getMessage());
         }
     }
 
-    public Boolean existsByEmail(User user) {
-        return userJpaRepository.existsByEmail(user.getEmail());
+    @Override
+    public Boolean existsByLogin(User user) {
+        return userJpaRepository.existsByLogin(user.getLogin());
     }
 }
