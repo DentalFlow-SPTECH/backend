@@ -49,11 +49,8 @@ public class RegisterAppointmentService implements RegisterAppointmentUseCase {
     }
 
     @Override
-    public List<AppointmentResponseDTO> listByDateAndDentist(LocalDate date, Long dentistId) {
-        if (dentistId == null) {
-            return List.of();
-        }
-        return repository.findByDentistIdAndDate(dentistId, date)
+    public List<AppointmentResponseDTO> listByDateAndDentist(LocalDate date, Long clinicId, Long dentistId) {
+        return repository.findByClinicIdAndDentistIdAndDate(clinicId, dentistId, date)
                 .stream()
                 .sorted((a, b) -> a.getScheduledAt().compareTo(b.getScheduledAt()))
                 .map(AppointmentResponseDTO::from)

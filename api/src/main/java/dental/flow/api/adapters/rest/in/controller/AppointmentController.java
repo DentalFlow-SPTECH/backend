@@ -5,6 +5,7 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.ApiResponse;
 import dental.flow.api.adapters.rest.in.controller.dto.response.AppointmentResponseDTO;
 import dental.flow.api.adapters.rest.in.controller.mapper.AppointmentWebMapper;
 import dental.flow.api.application.service.RegisterAppointmentService;
+import dental.flow.api.boot.security.ClinicAccess;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +31,7 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> register(@RequestBody RegisterAppointmentRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         AppointmentResponseDTO data = service.register(AppointmentWebMapper.toCommand(requestDTO));
         return ResponseEntity.status(201).body(ApiResponse.created("Agendamento cadastrado com sucesso.", data));
     }
@@ -37,6 +39,7 @@ public class AppointmentController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getById(@PathVariable Long id) {
         AppointmentResponseDTO data = service.getById(id);
+        ClinicAccess.requireClinic(data.clinicId());
         return ResponseEntity.ok(ApiResponse.ok("Agendamento consultado com sucesso.", data));
     }
 
@@ -45,13 +48,15 @@ public class AppointmentController {
             @RequestParam LocalDate date,
             @RequestParam(required = false) Long dentistId
     ) {
-        List<AppointmentResponseDTO> data = service.listByDateAndDentist(date, dentistId);
+        Long clinicId = ClinicAccess.currentUser().clinicId();
+        List<AppointmentResponseDTO> data = service.listByDateAndDentist(date, clinicId, dentistId);
         return ResponseEntity.ok(ApiResponse.ok("Agendamentos consultados com sucesso.", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> update(@PathVariable Long id,
                                                                     @RequestBody RegisterAppointmentRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         AppointmentResponseDTO data = service.update(id, AppointmentWebMapper.toCommand(requestDTO));
         return ResponseEntity.ok(ApiResponse.ok("Agendamento atualizado com sucesso.", data));
     }
@@ -60,6 +65,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateStatus(@PathVariable Long id,
                                                                           @RequestParam String status) {
         AppointmentResponseDTO data = service.updateStatus(id, status);
+        ClinicAccess.requireClinic(data.clinicId());
         return ResponseEntity.ok(ApiResponse.ok("Status do agendamento atualizado com sucesso.", data));
     }
 }

@@ -5,6 +5,7 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.ApiResponse;
 import dental.flow.api.adapters.rest.in.controller.dto.response.PatientResponseDTO;
 import dental.flow.api.adapters.rest.in.controller.mapper.PatientWebMapper;
 import dental.flow.api.application.service.RegisterPatientService;
+import dental.flow.api.boot.security.ClinicAccess;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PatientResponseDTO>> register(@RequestBody RegisterPatientRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         PatientResponseDTO data = registerPatientService.register(PatientWebMapper.toCommand(requestDTO));
         return ResponseEntity.status(201).body(ApiResponse.created("Paciente cadastrado com sucesso.", data));
     }
@@ -36,6 +38,7 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PatientResponseDTO>> getById(@PathVariable Long id) {
         PatientResponseDTO data = registerPatientService.getById(id);
+        ClinicAccess.requireClinic(data.clinicId());
         return ResponseEntity.ok(ApiResponse.ok("Paciente consultado com sucesso.", data));
     }
 
@@ -44,6 +47,7 @@ public class PatientController {
             @RequestParam Long clinicId,
             @RequestParam(required = false) String name
     ) {
+        ClinicAccess.requireClinic(clinicId);
         List<PatientResponseDTO> data = registerPatientService.listByClinicAndName(clinicId, name);
         return ResponseEntity.ok(ApiResponse.ok("Pacientes consultados com sucesso.", data));
     }
@@ -51,6 +55,7 @@ public class PatientController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PatientResponseDTO>> update(@PathVariable Long id,
                                                                 @RequestBody RegisterPatientRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         PatientResponseDTO data = registerPatientService.update(id, PatientWebMapper.toCommand(requestDTO));
         return ResponseEntity.ok(ApiResponse.ok("Paciente atualizado com sucesso.", data));
     }

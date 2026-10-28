@@ -5,6 +5,7 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.ApiResponse;
 import dental.flow.api.adapters.rest.in.controller.dto.response.RegisterUserResponseDTO;
 import dental.flow.api.adapters.rest.in.controller.mapper.UserWebMapper;
 import dental.flow.api.application.in.RegisterUserUseCase;
+import dental.flow.api.boot.security.ClinicAccess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<RegisterUserResponseDTO>> register(@RequestBody RegisterUserRequestDTO requestDTO){
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         RegisterUserResponseDTO data = registerUserUseCase.register(UserWebMapper.toCommand(requestDTO));
         ApiResponse<RegisterUserResponseDTO> response = ApiResponse.created("Usuário cadastrado com sucesso.", data);
         return ResponseEntity.status(201).body(response);

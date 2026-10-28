@@ -11,6 +11,7 @@ public class UserPersistenceMapper {
                 dto.login(),
                 dto.password(),
                 dto.clinicId(),
+                dto.dentistId(),
                 dto.accessLevel(),
                 dto.active()
         );
@@ -22,6 +23,7 @@ public class UserPersistenceMapper {
                 user.getLogin(),
                 user.getPassword(),
                 user.getClinicId(),
+                user.getDentistId(),
                 user.getAccessLevel(),
                 user.getActive()
         );

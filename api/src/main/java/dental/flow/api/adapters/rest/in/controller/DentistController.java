@@ -5,6 +5,7 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.ApiResponse;
 import dental.flow.api.adapters.rest.in.controller.dto.response.DentistResponseDTO;
 import dental.flow.api.adapters.rest.in.controller.mapper.DentistWebMapper;
 import dental.flow.api.application.service.RegisterDentistService;
+import dental.flow.api.boot.security.ClinicAccess;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class DentistController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<DentistResponseDTO>> register(@RequestBody RegisterDentistRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         DentistResponseDTO data = service.register(DentistWebMapper.toCommand(requestDTO));
         return ResponseEntity.status(201).body(ApiResponse.created("Dentista cadastrado com sucesso.", data));
     }
@@ -35,11 +37,13 @@ public class DentistController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<DentistResponseDTO>> getById(@PathVariable Long id) {
         DentistResponseDTO data = service.getById(id);
+        ClinicAccess.requireClinic(data.clinicId());
         return ResponseEntity.ok(ApiResponse.ok("Dentista consultado com sucesso.", data));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<DentistResponseDTO>>> listByClinic(@RequestParam Long clinicId) {
+        ClinicAccess.requireClinic(clinicId);
         List<DentistResponseDTO> data = service.listByClinic(clinicId);
         return ResponseEntity.ok(ApiResponse.ok("Dentistas consultados com sucesso.", data));
     }
@@ -47,6 +51,7 @@ public class DentistController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<DentistResponseDTO>> update(@PathVariable Long id,
                                                                 @RequestBody RegisterDentistRequestDTO requestDTO) {
+        ClinicAccess.requireClinic(requestDTO.clinicId());
         DentistResponseDTO data = service.update(id, DentistWebMapper.toCommand(requestDTO));
         return ResponseEntity.ok(ApiResponse.ok("Dentista atualizado com sucesso.", data));
     }

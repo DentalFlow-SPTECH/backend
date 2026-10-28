@@ -11,14 +11,20 @@ public class User {
     private String login;
     private String password;
     private Long clinicId;
+    private Long dentistId;
     private String accessLevel;
     private Boolean active;
 
     public User(String name, String login, String password, Long clinicId) {
-        this(name, login, password, clinicId, "ADMIN", true);
+        this(name, login, password, clinicId, null, "RECEPCIONISTA", true);
     }
 
     public User(String name, String login, String password, Long clinicId, String accessLevel, Boolean active) {
+        this(name, login, password, clinicId, null, accessLevel, active);
+    }
+
+    public User(String name, String login, String password, Long clinicId, Long dentistId,
+                String accessLevel, Boolean active) {
         if (name == null || name.isBlank()) {
             throw new DomainException(Failures.DOMAIN_ERROR, "O nome é obrigatório.");
         }
@@ -41,11 +47,20 @@ public class User {
             throw new DomainException(Failures.DOMAIN_ERROR, "A clínica é obrigatória.");
         }
 
+        AccessLevel normalizedAccessLevel = AccessLevel.from(accessLevel);
+        if (normalizedAccessLevel == AccessLevel.DENTISTA && (dentistId == null || dentistId <= 0)) {
+            throw new DomainException(Failures.DOMAIN_ERROR, "O usuário dentista deve estar vinculado a um dentista.");
+        }
+        if (normalizedAccessLevel == AccessLevel.RECEPCIONISTA && dentistId != null) {
+            throw new DomainException(Failures.DOMAIN_ERROR, "O usuário recepcionista não pode estar vinculado a um dentista.");
+        }
+
         this.name = name.trim();
         this.login = login.trim().toLowerCase(Locale.ROOT);
         this.password = password;
         this.clinicId = clinicId;
-        this.accessLevel = (accessLevel == null || accessLevel.isBlank()) ? "ADMIN" : accessLevel.trim().toUpperCase(Locale.ROOT);
+        this.dentistId = dentistId;
+        this.accessLevel = normalizedAccessLevel.name();
         this.active = active == null ? true : active;
     }
 
@@ -87,6 +102,14 @@ public class User {
 
     public void setClinicId(Long clinicId) {
         this.clinicId = clinicId;
+    }
+
+    public Long getDentistId() {
+        return dentistId;
+    }
+
+    public void setDentistId(Long dentistId) {
+        this.dentistId = dentistId;
     }
 
     public String getAccessLevel() {

@@ -36,6 +36,9 @@ public class UserEntity {
     @JoinColumn(name = "id_clinica", nullable = false)
     private ClinicEntity clinic;
 
+    @Column(name = "id_dentista", unique = true)
+    private Long dentistId;
+
     @Column(name = "nivel_acesso", nullable = false, length = 20)
     private String accessLevel;
 
@@ -49,11 +52,17 @@ public class UserEntity {
     }
 
     public UserEntity(String name, String login, String password, Long clinicId, String accessLevel, Boolean active) {
+        this(name, login, password, clinicId, null, accessLevel, active);
+    }
+
+    public UserEntity(String name, String login, String password, Long clinicId, Long dentistId,
+                      String accessLevel, Boolean active) {
         this.name = name;
         this.login = login;
         this.password = password;
         this.setClinicId(clinicId);
-        this.accessLevel = (accessLevel == null || accessLevel.isBlank()) ? "ADMIN" : accessLevel.trim().toUpperCase(Locale.ROOT);
+        this.setDentistId(dentistId);
+        this.accessLevel = accessLevel.trim().toUpperCase(Locale.ROOT);
         this.active = active == null ? true : active;
     }
 
@@ -110,6 +119,14 @@ public class UserEntity {
 
     public void setClinic(ClinicEntity clinic) {
         this.clinic = clinic;
+    }
+
+    public Long getDentistId() {
+        return dentistId;
+    }
+
+    public void setDentistId(Long dentistId) {
+        this.dentistId = dentistId;
     }
 
     public String getAccessLevel() {

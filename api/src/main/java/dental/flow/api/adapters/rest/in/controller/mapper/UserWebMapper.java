@@ -10,6 +10,7 @@ public class UserWebMapper {
                 dto.login(),
                 dto.password(),
                 dto.clinicId(),
+                dto.dentistId(),
                 dto.accessLevel(),
                 dto.active()
         );

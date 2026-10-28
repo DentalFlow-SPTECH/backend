@@ -39,12 +39,13 @@ public class RegisterAppointmentRepositoryImpl implements RegisterAppointmentRep
     }
 
     @Override
-    public List<Appointment> findByDentistIdAndDate(Long dentistId, LocalDate date) {
-        return appointmentJpaRepository.findByDentist_IdAndScheduledAtBetween(
-                dentistId,
-                date.atStartOfDay(),
-                date.atTime(LocalTime.MAX)
-        ).stream().map(AppointmentPersistenceMapper::toDomain).toList();
+    public List<Appointment> findByClinicIdAndDentistIdAndDate(Long clinicId, Long dentistId, LocalDate date) {
+        List<AppointmentEntity> entities = dentistId == null
+                ? appointmentJpaRepository.findByClinic_IdAndScheduledAtBetween(
+                        clinicId, date.atStartOfDay(), date.atTime(LocalTime.MAX))
+                : appointmentJpaRepository.findByClinic_IdAndDentist_IdAndScheduledAtBetween(
+                        clinicId, dentistId, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+        return entities.stream().map(AppointmentPersistenceMapper::toDomain).toList();
     }
 
     @Override

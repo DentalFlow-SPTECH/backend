@@ -9,7 +9,7 @@ import java.util.List;
 public interface RegisterAppointmentUseCase {
     AppointmentResponseDTO register(RegisterAppointmentCommand command);
     AppointmentResponseDTO getById(Long id);
-    List<AppointmentResponseDTO> listByDateAndDentist(LocalDate date, Long dentistId);
+    List<AppointmentResponseDTO> listByDateAndDentist(LocalDate date, Long clinicId, Long dentistId);
     AppointmentResponseDTO update(Long id, RegisterAppointmentCommand command);
     AppointmentResponseDTO updateStatus(Long id, String status);
 }

@@ -27,13 +27,19 @@ CREATE TABLE clinica (
 CREATE TABLE usuario (
                          id_usuario   INT NOT NULL AUTO_INCREMENT,
                          id_clinica   INT NOT NULL,
+                         id_dentista  INT NULL,
                          nome         VARCHAR(100) NOT NULL,
                          login        VARCHAR(50) NOT NULL,
                          senha_hash   VARCHAR(255) NOT NULL,
                          nivel_acesso VARCHAR(20) NOT NULL,
-                         ativo        TINYINT(1) DEFAULT 1,
+                         ativo        TINYINT(1) NOT NULL DEFAULT 1,
                          PRIMARY KEY (id_usuario),
                          UNIQUE KEY uk_usuario_login (login),
+                         UNIQUE KEY uk_usuario_dentista (id_dentista),
+                         CONSTRAINT chk_usuario_persona CHECK (
+                             (nivel_acesso = 'DENTISTA' AND id_dentista IS NOT NULL)
+                             OR (nivel_acesso = 'RECEPCIONISTA' AND id_dentista IS NULL)
+                         ),
                          KEY idx_usuario_clinica (id_clinica),
                          CONSTRAINT fk_usuario_clinica
                              FOREIGN KEY (id_clinica) REFERENCES clinica (id_clinica)
@@ -80,6 +86,11 @@ CREATE TABLE dentista (
                                   ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+ALTER TABLE usuario
+    ADD CONSTRAINT fk_usuario_dentista
+        FOREIGN KEY (id_dentista) REFERENCES dentista (id_dentista)
+            ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- =====================================================
 -- Tabela: procedimento
 -- =====================================================
@@ -94,6 +105,78 @@ CREATE TABLE procedimento (
                               CONSTRAINT fk_procedimento_clinica
                                   FOREIGN KEY (id_clinica) REFERENCES clinica (id_clinica)
                                       ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- Tabela: insumo (produtos e materiais de consumo)
+-- =====================================================
+CREATE TABLE insumo (
+                        id_insumo      INT NOT NULL AUTO_INCREMENT,
+                        id_clinica     INT NOT NULL,
+                        nome           VARCHAR(100) NOT NULL,
+                        unidade        VARCHAR(20) NOT NULL,
+                        custo_unitario DECIMAL(12,2) NOT NULL DEFAULT 0,
+                        estoque_atual  DECIMAL(12,3) NOT NULL DEFAULT 0,
+                        estoque_minimo DECIMAL(12,3) NOT NULL DEFAULT 0,
+                        ativo          TINYINT(1) NOT NULL DEFAULT 1,
+                        PRIMARY KEY (id_insumo),
+                        UNIQUE KEY uk_insumo_clinica_nome (id_clinica, nome),
+                        KEY idx_insumo_clinica_ativo (id_clinica, ativo),
+                        CONSTRAINT fk_insumo_clinica
+                            FOREIGN KEY (id_clinica) REFERENCES clinica (id_clinica)
+                                ON DELETE RESTRICT ON UPDATE CASCADE,
+                        CONSTRAINT chk_insumo_valores CHECK (
+                            custo_unitario >= 0 AND estoque_atual >= 0 AND estoque_minimo >= 0
+                        )
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- Tabela: movimentacao_insumo (histórico imutável de estoque)
+-- =====================================================
+CREATE TABLE movimentacao_insumo (
+                                     id_movimentacao       INT NOT NULL AUTO_INCREMENT,
+                                     id_insumo             INT NOT NULL,
+                                     id_usuario            INT NOT NULL,
+                                     tipo                  VARCHAR(10) NOT NULL,
+                                     quantidade            DECIMAL(12,3) NOT NULL,
+                                     custo_unitario_na_data DECIMAL(12,2) NOT NULL DEFAULT 0,
+                                     motivo                VARCHAR(150),
+                                     data_movimentacao     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                     PRIMARY KEY (id_movimentacao),
+                                     KEY idx_mov_insumo_data (id_insumo, data_movimentacao),
+                                     CONSTRAINT fk_mov_insumo
+                                         FOREIGN KEY (id_insumo) REFERENCES insumo (id_insumo)
+                                             ON DELETE RESTRICT ON UPDATE CASCADE,
+                                     CONSTRAINT fk_mov_usuario
+                                         FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario)
+                                             ON DELETE RESTRICT ON UPDATE CASCADE,
+                                     CONSTRAINT chk_mov_tipo CHECK (tipo IN ('ENTRADA', 'SAIDA', 'AJUSTE')),
+                                     CONSTRAINT chk_mov_quantidade CHECK (quantidade >= 0)
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- Tabela: equipamento
+-- =====================================================
+CREATE TABLE equipamento (
+                             id_equipamento  INT NOT NULL AUTO_INCREMENT,
+                             id_clinica      INT NOT NULL,
+                             nome            VARCHAR(100) NOT NULL,
+                             descricao       VARCHAR(255),
+                             valor_aquisicao DECIMAL(12,2) NOT NULL DEFAULT 0,
+                             vida_util_usos  INT NOT NULL,
+                             usos_realizados INT NOT NULL DEFAULT 0,
+                             custo_por_uso   DECIMAL(12,2) NOT NULL DEFAULT 0,
+                             ativo           TINYINT(1) NOT NULL DEFAULT 1,
+                             PRIMARY KEY (id_equipamento),
+                             UNIQUE KEY uk_equipamento_clinica_nome (id_clinica, nome),
+                             KEY idx_equipamento_clinica_ativo (id_clinica, ativo),
+                             CONSTRAINT fk_equipamento_clinica
+                                 FOREIGN KEY (id_clinica) REFERENCES clinica (id_clinica)
+                                     ON DELETE RESTRICT ON UPDATE CASCADE,
+                             CONSTRAINT chk_equipamento_valores CHECK (
+                                 valor_aquisicao >= 0 AND vida_util_usos > 0
+                                 AND usos_realizados >= 0 AND custo_por_uso >= 0
+                             )
 ) ENGINE=InnoDB;
 
 -- =====================================================
@@ -113,6 +196,7 @@ CREATE TABLE agendamento (
                              KEY idx_agend_clinica (id_clinica),
                              KEY idx_agend_paciente (id_paciente),
                              KEY idx_agend_dentista_data (id_dentista, data_hora),
+                             KEY idx_agend_dashboard (id_clinica, data_hora, id_dentista, status),
                              KEY idx_agend_procedimento (id_procedimento),
                              KEY idx_agend_usuario (id_usuario),
                              CONSTRAINT fk_agend_clinica
@@ -170,11 +254,14 @@ CREATE TABLE mapa_diario (
                              qtd_repeticoes           INT DEFAULT 0,
 
                              observacoes              TEXT,
+                             status                   VARCHAR(15) NOT NULL DEFAULT 'ABERTO',
+                             data_fechamento          DATETIME NULL,
                              PRIMARY KEY (id_mapa_diario),
                              UNIQUE KEY uk_mapa_diario_clinica_dentista_data (id_clinica, id_dentista, data_mapa),
                              KEY idx_mapa_diario_clinica (id_clinica),
                              KEY idx_mapa_diario_dentista (id_dentista),
                              KEY idx_mapa_diario_data (data_mapa),
+                             KEY idx_mapa_dashboard (id_clinica, data_mapa, id_dentista),
                              KEY idx_mapa_diario_atendente (id_usuario_atendente),
                              KEY idx_mapa_diario_conferente (id_usuario_conferente),
                              KEY idx_mapa_diario_escritorio (id_usuario_escritorio),
@@ -296,6 +383,26 @@ CREATE TABLE escala_equipe (
                                CONSTRAINT fk_escala_equipe_usuario
                                    FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario)
                                        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =====================================================
+-- Tabela: auditoria (alterações financeiras e fechamentos)
+-- =====================================================
+CREATE TABLE auditoria (
+                           id_auditoria  INT NOT NULL AUTO_INCREMENT,
+                           tabela        VARCHAR(50) NOT NULL,
+                           id_registro   INT NOT NULL,
+                           acao          VARCHAR(20) NOT NULL,
+                           valor_anterior TEXT,
+                           valor_novo     TEXT,
+                           id_usuario    INT NOT NULL,
+                           data_hora     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                           PRIMARY KEY (id_auditoria),
+                           KEY idx_auditoria_registro (tabela, id_registro, data_hora),
+                           KEY idx_auditoria_usuario (id_usuario),
+                           CONSTRAINT fk_auditoria_usuario
+                               FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario)
+                                   ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- =====================================================
