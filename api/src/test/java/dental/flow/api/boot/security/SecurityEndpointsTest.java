@@ -1,15 +1,11 @@
 package dental.flow.api.boot.security;
 
-import dental.flow.api.adapters.rest.in.controller.AuthController;
-import dental.flow.api.adapters.rest.in.controller.DashboardController;
-import dental.flow.api.adapters.rest.in.controller.PatientController;
-import dental.flow.api.adapters.rest.in.controller.InventoryController;
-import dental.flow.api.adapters.rest.in.controller.DailyMapController;
+import dental.flow.api.adapters.rest.in.controller.*;
 import dental.flow.api.adapters.rest.in.controller.dto.response.MonthlyDashboardResponseDTO;
 import dental.flow.api.adapters.rest.in.controller.dto.response.PatientResponseDTO;
-import dental.flow.api.application.in.QueryMonthlyDashboardUseCase;
-import dental.flow.api.application.in.InventoryUseCase;
 import dental.flow.api.application.in.DailyMapUseCase;
+import dental.flow.api.application.in.InventoryUseCase;
+import dental.flow.api.application.in.QueryMonthlyDashboardUseCase;
 import dental.flow.api.application.service.RegisterPatientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,12 +38,18 @@ class SecurityEndpointsTest {
     static class TestApplication {
     }
 
-    @Autowired private MockMvc mockMvc;
-    @MockitoBean private DatabaseUserDetailsService userDetailsService;
-    @MockitoBean private QueryMonthlyDashboardUseCase dashboardUseCase;
-    @MockitoBean private RegisterPatientService patientService;
-    @MockitoBean private InventoryUseCase inventoryUseCase;
-    @MockitoBean private DailyMapUseCase dailyMapUseCase;
+    @Autowired
+    private MockMvc mockMvc;
+    @MockitoBean
+    private DatabaseUserDetailsService userDetailsService;
+    @MockitoBean
+    private QueryMonthlyDashboardUseCase dashboardUseCase;
+    @MockitoBean
+    private RegisterPatientService patientService;
+    @MockitoBean
+    private InventoryUseCase inventoryUseCase;
+    @MockitoBean
+    private DailyMapUseCase dailyMapUseCase;
 
     private DentalFlowUserPrincipal dentist;
     private DentalFlowUserPrincipal receptionist;

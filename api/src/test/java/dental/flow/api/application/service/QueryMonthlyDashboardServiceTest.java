@@ -3,9 +3,9 @@ package dental.flow.api.application.service;
 import dental.flow.api.adapters.rest.in.controller.dto.response.MonthlyDashboardResponseDTO;
 import dental.flow.api.application.out.MonthlyDashboardRepository;
 import dental.flow.api.boot.exception.DomainException;
-import dental.flow.api.domain.dashboard.MonthlyDashboard;
-import dental.flow.api.domain.dashboard.DailyDashboardPoint;
 import dental.flow.api.domain.dashboard.AppointmentMetrics;
+import dental.flow.api.domain.dashboard.DailyDashboardPoint;
+import dental.flow.api.domain.dashboard.MonthlyDashboard;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,9 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class QueryMonthlyDashboardServiceTest {

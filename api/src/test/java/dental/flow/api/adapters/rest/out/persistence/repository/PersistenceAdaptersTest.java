@@ -1,12 +1,6 @@
 package dental.flow.api.adapters.rest.out.persistence.repository;
 
-import dental.flow.api.adapters.rest.out.persistence.entity.AppointmentEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.ClinicEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.DentistEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.MonthlyDashboardEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.PatientEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.ProcedureEntity;
-import dental.flow.api.adapters.rest.out.persistence.entity.UserEntity;
+import dental.flow.api.adapters.rest.out.persistence.entity.*;
 import dental.flow.api.boot.exception.DatabaseException;
 import dental.flow.api.domain.appointment.Appointment;
 import dental.flow.api.domain.clinic.Clinic;
@@ -26,9 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -36,13 +28,20 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PersistenceAdaptersTest {
-    @Mock private UserJpaRepository userJpa;
-    @Mock private ClinicJpaRepository clinicJpa;
-    @Mock private DentistJpaRepository dentistJpa;
-    @Mock private PatientJpaRepository patientJpa;
-    @Mock private ProcedureJpaRepository procedureJpa;
-    @Mock private AppointmentJpaRepository appointmentJpa;
-    @Mock private MonthlyDashboardJpaRepository dashboardJpa;
+    @Mock
+    private UserJpaRepository userJpa;
+    @Mock
+    private ClinicJpaRepository clinicJpa;
+    @Mock
+    private DentistJpaRepository dentistJpa;
+    @Mock
+    private PatientJpaRepository patientJpa;
+    @Mock
+    private ProcedureJpaRepository procedureJpa;
+    @Mock
+    private AppointmentJpaRepository appointmentJpa;
+    @Mock
+    private MonthlyDashboardJpaRepository dashboardJpa;
 
     @Test
     void shouldCoverUserPersistenceAdapter() {

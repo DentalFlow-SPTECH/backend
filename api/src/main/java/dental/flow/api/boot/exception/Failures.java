@@ -1,4 +1,3 @@
-
 package dental.flow.api.boot.exception;
 
 import org.springframework.http.HttpStatus;

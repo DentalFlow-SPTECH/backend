@@ -1,15 +1,6 @@
 package dental.flow.api.adapters.rest.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,7 +30,8 @@ public class ProcedureEntity {
     @OneToMany(mappedBy = "procedure")
     private List<AppointmentEntity> appointments = new ArrayList<>();
 
-    public ProcedureEntity() {}
+    public ProcedureEntity() {
+    }
 
     public ProcedureEntity(Long clinicId, String name, BigDecimal price, Integer durationMinutes) {
         this.setClinicId(clinicId);
@@ -48,11 +40,18 @@ public class ProcedureEntity {
         this.durationMinutes = durationMinutes;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getClinicId() {
         return clinic != null ? clinic.getId() : null;
     }
+
     public void setClinicId(Long clinicId) {
         if (clinicId == null) {
             this.clinic = null;
@@ -63,14 +62,44 @@ public class ProcedureEntity {
         }
         this.clinic.setId(clinicId);
     }
-    public ClinicEntity getClinic() { return clinic; }
-    public void setClinic(ClinicEntity clinic) { this.clinic = clinic; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-    public Integer getDurationMinutes() { return durationMinutes; }
-    public void setDurationMinutes(Integer durationMinutes) { this.durationMinutes = durationMinutes; }
-    public List<AppointmentEntity> getAppointments() { return appointments; }
-    public void setAppointments(List<AppointmentEntity> appointments) { this.appointments = appointments; }
+
+    public ClinicEntity getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(ClinicEntity clinic) {
+        this.clinic = clinic;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Integer getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public List<AppointmentEntity> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<AppointmentEntity> appointments) {
+        this.appointments = appointments;
+    }
 }

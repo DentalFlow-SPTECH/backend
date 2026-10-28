@@ -7,7 +7,10 @@ import java.util.Optional;
 
 public interface RegisterProcedureRepository {
     String register(Procedure procedure);
+
     Optional<Procedure> findById(Long id);
+
     List<Procedure> findByClinicId(Long clinicId);
+
     Procedure update(Procedure procedure);
 }

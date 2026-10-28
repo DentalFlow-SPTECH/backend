@@ -6,20 +6,16 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.ProcedureRespons
 import dental.flow.api.adapters.rest.in.controller.mapper.ProcedureWebMapper;
 import dental.flow.api.application.service.RegisterProcedureService;
 import dental.flow.api.boot.security.ClinicAccess;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/procedure")
+@Tag(name = "Procedimentos", description = "Cadastro e consulta dos procedimentos odontológicos")
 public class ProcedureController {
     private final RegisterProcedureService service;
 
@@ -28,6 +24,7 @@ public class ProcedureController {
     }
 
     @PostMapping
+    @Operation(summary = "Cadastrar um procedimento")
     public ResponseEntity<ApiResponse<ProcedureResponseDTO>> register(@RequestBody RegisterProcedureRequestDTO requestDTO) {
         ClinicAccess.requireClinic(requestDTO.clinicId());
         ProcedureResponseDTO data = service.register(ProcedureWebMapper.toCommand(requestDTO));
@@ -35,6 +32,7 @@ public class ProcedureController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Consultar um procedimento")
     public ResponseEntity<ApiResponse<ProcedureResponseDTO>> getById(@PathVariable Long id) {
         ProcedureResponseDTO data = service.getById(id);
         ClinicAccess.requireClinic(data.clinicId());
@@ -42,12 +40,14 @@ public class ProcedureController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar procedimentos da clínica")
     public ResponseEntity<ApiResponse<List<ProcedureResponseDTO>>> listByClinic(@RequestParam Long clinicId) {
         ClinicAccess.requireClinic(clinicId);
         return ResponseEntity.ok(ApiResponse.ok("Procedimentos consultados com sucesso.", service.listByClinic(clinicId)));
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar um procedimento")
     public ResponseEntity<ApiResponse<ProcedureResponseDTO>> update(@PathVariable Long id,
                                                                     @RequestBody RegisterProcedureRequestDTO requestDTO) {
         ClinicAccess.requireClinic(requestDTO.clinicId());

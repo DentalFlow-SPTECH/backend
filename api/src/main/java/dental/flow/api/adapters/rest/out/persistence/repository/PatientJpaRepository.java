@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PatientJpaRepository extends JpaRepository<PatientEntity, Long> {
     Boolean existsByClinic_IdAndCpf(Long clinicId, String cpf);
+
     List<PatientEntity> findByClinic_Id(Long clinicId);
 }

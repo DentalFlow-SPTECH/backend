@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface RegisterPatientRepository {
     String register(Patient patient);
+
     Boolean existsByClinicIdAndCpf(Long clinicId, String cpf);
+
     Optional<Patient> findById(Long id);
+
     List<Patient> findByClinicId(Long clinicId);
+
     Patient update(Patient patient);
 }

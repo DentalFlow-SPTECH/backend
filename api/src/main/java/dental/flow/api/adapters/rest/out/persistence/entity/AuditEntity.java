@@ -1,3 +1,59 @@
 package dental.flow.api.adapters.rest.out.persistence.entity;
-import jakarta.persistence.*; import java.time.LocalDateTime;
-@Entity @Table(name="auditoria") public class AuditEntity { @Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name="id_auditoria") private Long id; @Column(name="tabela",nullable=false) private String tableName; @Column(name="id_registro",nullable=false) private Long recordId; @Column(name="acao",nullable=false) private String action; @Column(name="valor_anterior",columnDefinition="TEXT") private String previousValue; @Column(name="valor_novo",columnDefinition="TEXT") private String newValue; @Column(name="id_usuario",nullable=false) private Long userId; @Column(name="data_hora",nullable=false) private LocalDateTime occurredAt; public AuditEntity(){} public void setTableName(String v){tableName=v;} public void setRecordId(Long v){recordId=v;} public void setAction(String v){action=v;} public void setPreviousValue(String v){previousValue=v;} public void setNewValue(String v){newValue=v;} public void setUserId(Long v){userId=v;} public void setOccurredAt(LocalDateTime v){occurredAt=v;} }
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "auditoria")
+public class AuditEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_auditoria")
+    private Long id;
+    @Column(name = "tabela", nullable = false)
+    private String tableName;
+    @Column(name = "id_registro", nullable = false)
+    private Long recordId;
+    @Column(name = "acao", nullable = false)
+    private String action;
+    @Column(name = "valor_anterior", columnDefinition = "TEXT")
+    private String previousValue;
+    @Column(name = "valor_novo", columnDefinition = "TEXT")
+    private String newValue;
+    @Column(name = "id_usuario", nullable = false)
+    private Long userId;
+    @Column(name = "data_hora", nullable = false)
+    private LocalDateTime occurredAt;
+
+    public AuditEntity() {
+    }
+
+    public void setTableName(String v) {
+        tableName = v;
+    }
+
+    public void setRecordId(Long v) {
+        recordId = v;
+    }
+
+    public void setAction(String v) {
+        action = v;
+    }
+
+    public void setPreviousValue(String v) {
+        previousValue = v;
+    }
+
+    public void setNewValue(String v) {
+        newValue = v;
+    }
+
+    public void setUserId(Long v) {
+        userId = v;
+    }
+
+    public void setOccurredAt(LocalDateTime v) {
+        occurredAt = v;
+    }
+}

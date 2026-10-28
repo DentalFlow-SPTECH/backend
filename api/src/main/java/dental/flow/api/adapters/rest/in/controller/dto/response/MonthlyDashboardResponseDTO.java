@@ -1,8 +1,8 @@
 package dental.flow.api.adapters.rest.in.controller.dto.response;
 
-import dental.flow.api.domain.dashboard.MonthlyDashboard;
-import dental.flow.api.domain.dashboard.DailyDashboardPoint;
 import dental.flow.api.domain.dashboard.AppointmentMetrics;
+import dental.flow.api.domain.dashboard.DailyDashboardPoint;
+import dental.flow.api.domain.dashboard.MonthlyDashboard;
 
 import java.util.List;
 

@@ -24,8 +24,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterAppointmentServiceTest {
-    @Mock private RegisterAppointmentRepository repository;
-    @InjectMocks private RegisterAppointmentService service;
+    @Mock
+    private RegisterAppointmentRepository repository;
+    @InjectMocks
+    private RegisterAppointmentService service;
 
     @Test
     void shouldCoverAppointmentHappyFlowsAndSortAgenda() {

@@ -8,7 +8,10 @@ import java.util.Optional;
 
 public interface RegisterAppointmentRepository {
     String register(Appointment appointment);
+
     Optional<Appointment> findById(Long id);
+
     List<Appointment> findByClinicIdAndDentistIdAndDate(Long clinicId, Long dentistId, LocalDate date);
+
     Appointment update(Appointment appointment);
 }

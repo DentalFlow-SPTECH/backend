@@ -5,6 +5,8 @@ import dental.flow.api.application.command.RegisterClinicCommand;
 
 public interface RegisterClinicUseCase {
     ClinicResponseDTO register(RegisterClinicCommand command);
+
     ClinicResponseDTO getById(Long id);
+
     ClinicResponseDTO update(Long id, RegisterClinicCommand command);
 }

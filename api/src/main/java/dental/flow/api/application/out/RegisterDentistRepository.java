@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface RegisterDentistRepository {
     String register(Dentist dentist);
+
     Boolean existsByCro(String cro);
+
     Optional<Dentist> findById(Long id);
+
     List<Dentist> findByClinicId(Long clinicId);
+
     Dentist update(Dentist dentist);
 }

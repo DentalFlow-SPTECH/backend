@@ -17,8 +17,8 @@ public record DashboardKpiResponseDTO(
         BigDecimal noShowRate
 ) {
     public static DashboardKpiResponseDTO from(MonthlyDashboardSummaryResponseDTO summary,
-                                                long operatingDays,
-                                                AppointmentMetrics appointments) {
+                                               long operatingDays,
+                                               AppointmentMetrics appointments) {
         return new DashboardKpiResponseDTO(
                 operatingDays,
                 DashboardMath.divide(summary.generalGross(), summary.patientCount()),

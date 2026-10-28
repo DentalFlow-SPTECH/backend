@@ -42,9 +42,9 @@ public class RegisterAppointmentRepositoryImpl implements RegisterAppointmentRep
     public List<Appointment> findByClinicIdAndDentistIdAndDate(Long clinicId, Long dentistId, LocalDate date) {
         List<AppointmentEntity> entities = dentistId == null
                 ? appointmentJpaRepository.findByClinic_IdAndScheduledAtBetween(
-                        clinicId, date.atStartOfDay(), date.atTime(LocalTime.MAX))
+                clinicId, date.atStartOfDay(), date.atTime(LocalTime.MAX))
                 : appointmentJpaRepository.findByClinic_IdAndDentist_IdAndScheduledAtBetween(
-                        clinicId, dentistId, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+                clinicId, dentistId, date.atStartOfDay(), date.atTime(LocalTime.MAX));
         return entities.stream().map(AppointmentPersistenceMapper::toDomain).toList();
     }
 

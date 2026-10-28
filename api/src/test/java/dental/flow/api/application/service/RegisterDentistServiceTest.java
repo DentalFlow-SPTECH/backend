@@ -21,8 +21,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterDentistServiceTest {
-    @Mock private RegisterDentistRepository repository;
-    @InjectMocks private RegisterDentistService service;
+    @Mock
+    private RegisterDentistRepository repository;
+    @InjectMocks
+    private RegisterDentistService service;
 
     @Test
     void shouldCoverDentistHappyFlows() {

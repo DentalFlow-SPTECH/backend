@@ -5,9 +5,9 @@ import dental.flow.api.application.in.QueryMonthlyDashboardUseCase;
 import dental.flow.api.application.out.MonthlyDashboardRepository;
 import dental.flow.api.boot.exception.DomainException;
 import dental.flow.api.boot.exception.Failures;
-import dental.flow.api.domain.dashboard.MonthlyDashboard;
-import dental.flow.api.domain.dashboard.DailyDashboardPoint;
 import dental.flow.api.domain.dashboard.AppointmentMetrics;
+import dental.flow.api.domain.dashboard.DailyDashboardPoint;
+import dental.flow.api.domain.dashboard.MonthlyDashboard;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

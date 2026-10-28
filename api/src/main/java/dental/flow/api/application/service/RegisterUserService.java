@@ -4,10 +4,11 @@ import dental.flow.api.adapters.rest.in.controller.dto.response.RegisterUserResp
 import dental.flow.api.adapters.rest.out.persistence.mapper.UserPersistenceMapper;
 import dental.flow.api.application.command.RegisterUserCommand;
 import dental.flow.api.application.in.RegisterUserUseCase;
-import dental.flow.api.application.out.RegisterUserRepository;
 import dental.flow.api.application.out.RegisterDentistRepository;
+import dental.flow.api.application.out.RegisterUserRepository;
 import dental.flow.api.boot.exception.BusinessException;
 import dental.flow.api.boot.exception.Failures;
+import dental.flow.api.domain.dentist.Dentist;
 import dental.flow.api.domain.user.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RegisterUserService implements RegisterUserUseCase {
     public RegisterUserResponseDTO register(RegisterUserCommand command) {
         User user = UserPersistenceMapper.toDomain(command);
         if (user.getDentistId() != null) {
-            var dentist = dentistRepository.findById(user.getDentistId())
+            Dentist dentist = dentistRepository.findById(user.getDentistId())
                     .orElseThrow(() -> new BusinessException(Failures.BUSINESS_FAILURE, "Dentista vinculado não encontrado."));
             if (!dentist.getClinicId().equals(user.getClinicId())) {
                 throw new BusinessException(Failures.BUSINESS_FAILURE, "O dentista e o usuário devem pertencer à mesma clínica.");

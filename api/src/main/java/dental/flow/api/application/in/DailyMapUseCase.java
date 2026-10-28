@@ -1,3 +1,21 @@
 package dental.flow.api.application.in;
-import dental.flow.api.adapters.rest.in.controller.dto.request.SaveDailyMapRequestDTO; import dental.flow.api.adapters.rest.in.controller.dto.response.DailyMapResponseDTO; import java.time.LocalDate; import java.util.List;
-public interface DailyMapUseCase { DailyMapResponseDTO create(Long clinicId,Long dentistId,Long userId,SaveDailyMapRequestDTO request); DailyMapResponseDTO update(Long id,Long clinicId,Long dentistId,Long userId,SaveDailyMapRequestDTO request); DailyMapResponseDTO get(Long id,Long clinicId,Long dentistId); DailyMapResponseDTO getByDate(LocalDate date,Long clinicId,Long dentistId); List<DailyMapResponseDTO> list(LocalDate start,LocalDate end,Long clinicId,Long dentistId); DailyMapResponseDTO close(Long id,Long clinicId,Long dentistId,Long userId); }
+
+import dental.flow.api.adapters.rest.in.controller.dto.request.SaveDailyMapRequestDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.DailyMapResponseDTO;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public interface DailyMapUseCase {
+    DailyMapResponseDTO create(Long clinicId, Long dentistId, Long userId, SaveDailyMapRequestDTO request);
+
+    DailyMapResponseDTO update(Long id, Long clinicId, Long dentistId, Long userId, SaveDailyMapRequestDTO request);
+
+    DailyMapResponseDTO get(Long id, Long clinicId, Long dentistId);
+
+    DailyMapResponseDTO getByDate(LocalDate date, Long clinicId, Long dentistId);
+
+    List<DailyMapResponseDTO> list(LocalDate start, LocalDate end, Long clinicId, Long dentistId);
+
+    DailyMapResponseDTO close(Long id, Long clinicId, Long dentistId, Long userId);
+}

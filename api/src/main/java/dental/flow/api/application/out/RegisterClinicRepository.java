@@ -6,7 +6,10 @@ import java.util.Optional;
 
 public interface RegisterClinicRepository {
     String register(Clinic clinic);
+
     Boolean existsByCnpj(String cnpj);
+
     Optional<Clinic> findById(Long id);
+
     Clinic update(Clinic clinic);
 }

@@ -1,15 +1,6 @@
 package dental.flow.api.adapters.rest.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +32,8 @@ public class DentistEntity {
     @OneToMany(mappedBy = "dentist")
     private List<AppointmentEntity> appointments = new ArrayList<>();
 
-    public DentistEntity() {}
+    public DentistEntity() {
+    }
 
     public DentistEntity(Long clinicId, String name, String cro, String specialty, String phone) {
         this.setClinicId(clinicId);
@@ -51,11 +43,18 @@ public class DentistEntity {
         this.phone = phone;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getClinicId() {
         return clinic != null ? clinic.getId() : null;
     }
+
     public void setClinicId(Long clinicId) {
         if (clinicId == null) {
             this.clinic = null;
@@ -66,16 +65,52 @@ public class DentistEntity {
         }
         this.clinic.setId(clinicId);
     }
-    public ClinicEntity getClinic() { return clinic; }
-    public void setClinic(ClinicEntity clinic) { this.clinic = clinic; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getCro() { return cro; }
-    public void setCro(String cro) { this.cro = cro; }
-    public String getSpecialty() { return specialty; }
-    public void setSpecialty(String specialty) { this.specialty = specialty; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public List<AppointmentEntity> getAppointments() { return appointments; }
-    public void setAppointments(List<AppointmentEntity> appointments) { this.appointments = appointments; }
+
+    public ClinicEntity getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(ClinicEntity clinic) {
+        this.clinic = clinic;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCro() {
+        return cro;
+    }
+
+    public void setCro(String cro) {
+        this.cro = cro;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<AppointmentEntity> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<AppointmentEntity> appointments) {
+        this.appointments = appointments;
+    }
 }

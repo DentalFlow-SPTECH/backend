@@ -1,4 +1,3 @@
-
 package dental.flow.api.boot.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,4 +8,5 @@ public record ErrorResponse(
         int status,
         String message,
         String cause
-) {}
+) {
+}

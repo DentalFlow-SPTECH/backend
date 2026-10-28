@@ -1,9 +1,93 @@
 package dental.flow.api.adapters.rest.in.controller;
-import dental.flow.api.adapters.rest.in.controller.dto.request.*; import dental.flow.api.adapters.rest.in.controller.dto.response.*; import dental.flow.api.application.in.*; import dental.flow.api.boot.security.*; import org.junit.jupiter.api.*; import org.mockito.*; import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; import org.springframework.security.core.context.SecurityContextHolder; import java.math.BigDecimal; import java.time.LocalDate; import java.util.*; import static org.junit.jupiter.api.Assertions.*; import static org.mockito.ArgumentMatchers.*; import static org.mockito.Mockito.*;
+
+import dental.flow.api.adapters.rest.in.controller.dto.request.SaveDailyMapRequestDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.request.SaveEquipmentRequestDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.request.SaveInventoryProductRequestDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.request.StockMovementRequestDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.DailyMapResponseDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.EquipmentResponseDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.InventoryProductResponseDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.StockMovementResponseDTO;
+import dental.flow.api.application.in.DailyMapUseCase;
+import dental.flow.api.application.in.InventoryUseCase;
+import dental.flow.api.boot.security.DentalFlowUserPrincipal;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 class InventoryAndDailyMapControllerTest {
- InventoryUseCase inventory=mock(InventoryUseCase.class); DailyMapUseCase maps=mock(DailyMapUseCase.class); InventoryController inventoryController=new InventoryController(inventory); DailyMapController mapController=new DailyMapController(maps);
- @BeforeEach void auth(){var p=new DentalFlowUserPrincipal(7L,1L,2L,"Ana","ana","hash","DENTISTA",true);SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(p,"",p.getAuthorities()));}
- @AfterEach void clear(){SecurityContextHolder.clearContext();}
- @Test void shouldCallEveryInventoryRoute(){var product=new InventoryProductResponseDTO(1L,1L,"Luva","UN",BigDecimal.ONE,BigDecimal.TEN,BigDecimal.ONE,false,true);var equipment=new EquipmentResponseDTO(2L,1L,"Raio X",null,new BigDecimal("100"),10,0,new BigDecimal("10"),true);var movement=new StockMovementResponseDTO(3L,1L,7L,"ENTRADA",BigDecimal.ONE,BigDecimal.ONE,null,null);when(inventory.createProduct(anyLong(),anyLong(),any())).thenReturn(product);when(inventory.updateProduct(anyLong(),anyLong(),any())).thenReturn(product);when(inventory.getProduct(anyLong(),anyLong())).thenReturn(product);when(inventory.listProducts(anyLong(),any())).thenReturn(List.of(product));when(inventory.moveStock(anyLong(),anyLong(),anyLong(),any())).thenReturn(movement);when(inventory.listMovements(anyLong(),anyLong())).thenReturn(List.of(movement));when(inventory.createEquipment(anyLong(),any())).thenReturn(equipment);when(inventory.updateEquipment(anyLong(),anyLong(),any())).thenReturn(equipment);when(inventory.getEquipment(anyLong(),anyLong())).thenReturn(equipment);when(inventory.listEquipment(anyLong(),any())).thenReturn(List.of(equipment));var pr=new SaveInventoryProductRequestDTO("Luva","UN",BigDecimal.ONE,BigDecimal.ZERO,BigDecimal.ONE,true);var er=new SaveEquipmentRequestDTO("Raio X",null,new BigDecimal("100"),10,0,true);assertEquals(201,inventoryController.createProduct(pr).getStatusCode().value());assertEquals(200,inventoryController.updateProduct(1L,pr).getStatusCode().value());assertEquals(200,inventoryController.getProduct(1L).getStatusCode().value());assertEquals(1,inventoryController.listProducts(true).getBody().data().size());assertEquals(201,inventoryController.moveStock(1L,new StockMovementRequestDTO("ENTRADA",BigDecimal.ONE,null)).getStatusCode().value());assertEquals(1,inventoryController.listMovements(1L).getBody().data().size());assertEquals(201,inventoryController.createEquipment(er).getStatusCode().value());assertEquals(200,inventoryController.updateEquipment(2L,er).getStatusCode().value());assertEquals(200,inventoryController.getEquipment(2L).getStatusCode().value());assertEquals(1,inventoryController.listEquipment(true).getBody().data().size());}
- @Test void shouldCallEveryDailyMapRoute(){DailyMapResponseDTO response=mock(DailyMapResponseDTO.class);when(maps.create(anyLong(),anyLong(),anyLong(),any())).thenReturn(response);when(maps.update(anyLong(),anyLong(),anyLong(),anyLong(),any())).thenReturn(response);when(maps.get(anyLong(),anyLong(),anyLong())).thenReturn(response);when(maps.getByDate(any(),anyLong(),anyLong())).thenReturn(response);when(maps.list(any(),any(),anyLong(),anyLong())).thenReturn(List.of(response));when(maps.close(anyLong(),anyLong(),anyLong(),anyLong())).thenReturn(response);SaveDailyMapRequestDTO request=new SaveDailyMapRequestDTO(LocalDate.now(),null,null,null,null,null,null,null,null,null,null,List.of(),List.of(),List.of(),List.of());assertEquals(201,mapController.create(request).getStatusCode().value());assertEquals(200,mapController.update(1L,request).getStatusCode().value());assertEquals(200,mapController.get(1L).getStatusCode().value());assertEquals(200,mapController.getByDate(LocalDate.now()).getStatusCode().value());assertEquals(1,mapController.list(LocalDate.now(),LocalDate.now()).getBody().data().size());assertEquals(200,mapController.close(1L).getStatusCode().value());}
+    InventoryUseCase inventory = mock(InventoryUseCase.class);
+    DailyMapUseCase maps = mock(DailyMapUseCase.class);
+    InventoryController inventoryController = new InventoryController(inventory);
+    DailyMapController mapController = new DailyMapController(maps);
+
+    @BeforeEach
+    void auth() {
+        var p = new DentalFlowUserPrincipal(7L, 1L, 2L, "Ana", "ana", "hash", "DENTISTA", true);
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(p, "", p.getAuthorities()));
+    }
+
+    @AfterEach
+    void clear() {
+        SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void shouldCallEveryInventoryRoute() {
+        var product = new InventoryProductResponseDTO(1L, 1L, "Luva", "UN", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ONE, false, true);
+        var equipment = new EquipmentResponseDTO(2L, 1L, "Raio X", null, new BigDecimal("100"), 10, 0, new BigDecimal("10"), true);
+        var movement = new StockMovementResponseDTO(3L, 1L, 7L, "ENTRADA", BigDecimal.ONE, BigDecimal.ONE, null, null);
+        when(inventory.createProduct(anyLong(), anyLong(), any())).thenReturn(product);
+        when(inventory.updateProduct(anyLong(), anyLong(), anyLong(), any())).thenReturn(product);
+        when(inventory.getProduct(anyLong(), anyLong())).thenReturn(product);
+        when(inventory.listProducts(anyLong(), any())).thenReturn(List.of(product));
+        when(inventory.moveStock(anyLong(), anyLong(), anyLong(), any())).thenReturn(movement);
+        when(inventory.listMovements(anyLong(), anyLong())).thenReturn(List.of(movement));
+        when(inventory.createEquipment(anyLong(), anyLong(), any())).thenReturn(equipment);
+        when(inventory.updateEquipment(anyLong(), anyLong(), anyLong(), any())).thenReturn(equipment);
+        when(inventory.getEquipment(anyLong(), anyLong())).thenReturn(equipment);
+        when(inventory.listEquipment(anyLong(), any())).thenReturn(List.of(equipment));
+        var pr = new SaveInventoryProductRequestDTO("Luva", "UN", BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE, true);
+        var er = new SaveEquipmentRequestDTO("Raio X", null, new BigDecimal("100"), 10, 0, true);
+        assertEquals(201, inventoryController.createProduct(pr).getStatusCode().value());
+        assertEquals(200, inventoryController.updateProduct(1L, pr).getStatusCode().value());
+        assertEquals(200, inventoryController.getProduct(1L).getStatusCode().value());
+        assertEquals(1, inventoryController.listProducts(true).getBody().data().size());
+        assertEquals(201, inventoryController.moveStock(1L, new StockMovementRequestDTO("ENTRADA", BigDecimal.ONE, null)).getStatusCode().value());
+        assertEquals(1, inventoryController.listMovements(1L).getBody().data().size());
+        assertEquals(201, inventoryController.createEquipment(er).getStatusCode().value());
+        assertEquals(200, inventoryController.updateEquipment(2L, er).getStatusCode().value());
+        assertEquals(200, inventoryController.getEquipment(2L).getStatusCode().value());
+        assertEquals(1, inventoryController.listEquipment(true).getBody().data().size());
+    }
+
+    @Test
+    void shouldCallEveryDailyMapRoute() {
+        DailyMapResponseDTO response = mock(DailyMapResponseDTO.class);
+        when(maps.create(anyLong(), anyLong(), anyLong(), any())).thenReturn(response);
+        when(maps.update(anyLong(), anyLong(), anyLong(), anyLong(), any())).thenReturn(response);
+        when(maps.get(anyLong(), anyLong(), anyLong())).thenReturn(response);
+        when(maps.getByDate(any(), anyLong(), anyLong())).thenReturn(response);
+        when(maps.list(any(), any(), anyLong(), anyLong())).thenReturn(List.of(response));
+        when(maps.close(anyLong(), anyLong(), anyLong(), anyLong())).thenReturn(response);
+        SaveDailyMapRequestDTO request = new SaveDailyMapRequestDTO(LocalDate.now(), null, null, null, null, null, null, null, null, null, null, List.of(), List.of(), List.of(), List.of());
+        assertEquals(201, mapController.create(request).getStatusCode().value());
+        assertEquals(200, mapController.update(1L, request).getStatusCode().value());
+        assertEquals(200, mapController.get(1L).getStatusCode().value());
+        assertEquals(200, mapController.getByDate(LocalDate.now()).getStatusCode().value());
+        assertEquals(1, mapController.list(LocalDate.now(), LocalDate.now()).getBody().data().size());
+        assertEquals(200, mapController.close(1L).getStatusCode().value());
+    }
 }

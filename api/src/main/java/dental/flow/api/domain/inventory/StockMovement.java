@@ -14,11 +14,13 @@ public record StockMovement(Long id, Long productId, Long userId, String type, B
 
     public StockMovement {
         String normalized = type == null ? "" : type.trim().toUpperCase(Locale.ROOT);
-        if (!TYPES.contains(normalized)) throw new DomainException(Failures.DOMAIN_ERROR, "Tipo de movimentação inválido.");
+        if (!TYPES.contains(normalized))
+            throw new DomainException(Failures.DOMAIN_ERROR, "Tipo de movimentação inválido.");
         if (quantity == null || quantity.signum() < 0 || (!"AJUSTE".equals(normalized) && quantity.signum() == 0)) {
             throw new DomainException(Failures.DOMAIN_ERROR, "A quantidade da movimentação é inválida.");
         }
-        if (reason != null && reason.length() > 150) throw new DomainException(Failures.DOMAIN_ERROR, "O motivo deve ter no máximo 150 caracteres.");
+        if (reason != null && reason.length() > 150)
+            throw new DomainException(Failures.DOMAIN_ERROR, "O motivo deve ter no máximo 150 caracteres.");
         type = normalized;
         reason = reason == null || reason.isBlank() ? null : reason.trim();
     }

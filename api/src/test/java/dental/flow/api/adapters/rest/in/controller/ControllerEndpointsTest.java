@@ -1,19 +1,9 @@
 package dental.flow.api.adapters.rest.in.controller;
 
-import dental.flow.api.adapters.rest.in.controller.dto.response.AppointmentResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.ClinicResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.DentistResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.MonthlyDashboardResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.PatientResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.ProcedureResponseDTO;
-import dental.flow.api.adapters.rest.in.controller.dto.response.RegisterUserResponseDTO;
+import dental.flow.api.adapters.rest.in.controller.dto.response.*;
 import dental.flow.api.application.in.QueryMonthlyDashboardUseCase;
 import dental.flow.api.application.in.RegisterUserUseCase;
-import dental.flow.api.application.service.RegisterAppointmentService;
-import dental.flow.api.application.service.RegisterClinicService;
-import dental.flow.api.application.service.RegisterDentistService;
-import dental.flow.api.application.service.RegisterPatientService;
-import dental.flow.api.application.service.RegisterProcedureService;
+import dental.flow.api.application.service.*;
 import dental.flow.api.boot.exception.DomainException;
 import dental.flow.api.boot.exception.Failures;
 import dental.flow.api.boot.exception.GlobalExceptionHandler;
@@ -24,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,24 +26,26 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @ExtendWith(MockitoExtension.class)
 class ControllerEndpointsTest {
-    @Mock private RegisterUserUseCase userUseCase;
-    @Mock private RegisterClinicService clinicService;
-    @Mock private RegisterDentistService dentistService;
-    @Mock private RegisterPatientService patientService;
-    @Mock private RegisterProcedureService procedureService;
-    @Mock private RegisterAppointmentService appointmentService;
-    @Mock private QueryMonthlyDashboardUseCase dashboardUseCase;
+    @Mock
+    private RegisterUserUseCase userUseCase;
+    @Mock
+    private RegisterClinicService clinicService;
+    @Mock
+    private RegisterDentistService dentistService;
+    @Mock
+    private RegisterPatientService patientService;
+    @Mock
+    private RegisterProcedureService procedureService;
+    @Mock
+    private RegisterAppointmentService appointmentService;
+    @Mock
+    private QueryMonthlyDashboardUseCase dashboardUseCase;
 
     private MockMvc mockMvc;
 

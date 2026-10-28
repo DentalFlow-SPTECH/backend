@@ -4,9 +4,9 @@ import dental.flow.api.adapters.rest.out.persistence.mapper.MonthlyDashboardPers
 import dental.flow.api.application.out.MonthlyDashboardRepository;
 import dental.flow.api.boot.exception.DatabaseException;
 import dental.flow.api.boot.exception.Failures;
-import dental.flow.api.domain.dashboard.MonthlyDashboard;
-import dental.flow.api.domain.dashboard.DailyDashboardPoint;
 import dental.flow.api.domain.dashboard.AppointmentMetrics;
+import dental.flow.api.domain.dashboard.DailyDashboardPoint;
+import dental.flow.api.domain.dashboard.MonthlyDashboard;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 

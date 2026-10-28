@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface DentistJpaRepository extends JpaRepository<DentistEntity, Long> {
     Boolean existsByCro(String cro);
+
     List<DentistEntity> findByClinic_Id(Long clinicId);
 }

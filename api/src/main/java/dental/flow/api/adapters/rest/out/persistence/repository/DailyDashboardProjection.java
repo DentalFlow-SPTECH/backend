@@ -5,10 +5,16 @@ import java.time.LocalDate;
 
 public interface DailyDashboardProjection {
     LocalDate getMapDate();
+
     BigDecimal getGeneralGross();
+
     BigDecimal getTotalExpenses();
+
     BigDecimal getTotalDiscounts();
+
     BigDecimal getNetTotal();
+
     BigDecimal getFinalBalance();
+
     Long getPatientCount();
 }

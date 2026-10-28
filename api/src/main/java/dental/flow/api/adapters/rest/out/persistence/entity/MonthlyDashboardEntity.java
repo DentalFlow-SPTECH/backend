@@ -1,13 +1,6 @@
 package dental.flow.api.adapters.rest.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
@@ -104,30 +97,107 @@ public class MonthlyDashboardEntity {
     public MonthlyDashboardEntity() {
     }
 
-    public Long getClinicId() { return clinicId; }
-    public Long getDentistId() { return dentistId; }
-    public Integer getYear() { return year; }
-    public Integer getMonth() { return month; }
-    public ClinicEntity getClinic() { return clinic; }
-    public DentistEntity getDentist() { return dentist; }
-    public Long getRegisteredDays() { return registeredDays; }
-    public BigDecimal getClinicalTotal() { return clinicalTotal; }
-    public BigDecimal getProsthesisTotal() { return prosthesisTotal; }
-    public BigDecimal getClinicalGross() { return clinicalGross; }
-    public BigDecimal getPediatricSurgeryGross() { return pediatricSurgeryGross; }
-    public BigDecimal getGeneralGross() { return generalGross; }
-    public BigDecimal getTotalExpenses() { return totalExpenses; }
-    public BigDecimal getCardDiscount() { return cardDiscount; }
-    public BigDecimal getPredatedCheckDiscount() { return predatedCheckDiscount; }
-    public BigDecimal getCashCheckDiscount() { return cashCheckDiscount; }
-    public BigDecimal getVoucherDiscount() { return voucherDiscount; }
-    public BigDecimal getOtherDiscount() { return otherDiscount; }
-    public BigDecimal getNetTotal() { return netTotal; }
-    public BigDecimal getFinalBalance() { return finalBalance; }
-    public Long getPatientCount() { return patientCount; }
-    public Long getMoldingCount() { return moldingCount; }
-    public Long getBiteCount() { return biteCount; }
-    public Long getFittingCount() { return fittingCount; }
-    public Long getDeliveryCount() { return deliveryCount; }
-    public Long getRepetitionCount() { return repetitionCount; }
+    public Long getClinicId() {
+        return clinicId;
+    }
+
+    public Long getDentistId() {
+        return dentistId;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public ClinicEntity getClinic() {
+        return clinic;
+    }
+
+    public DentistEntity getDentist() {
+        return dentist;
+    }
+
+    public Long getRegisteredDays() {
+        return registeredDays;
+    }
+
+    public BigDecimal getClinicalTotal() {
+        return clinicalTotal;
+    }
+
+    public BigDecimal getProsthesisTotal() {
+        return prosthesisTotal;
+    }
+
+    public BigDecimal getClinicalGross() {
+        return clinicalGross;
+    }
+
+    public BigDecimal getPediatricSurgeryGross() {
+        return pediatricSurgeryGross;
+    }
+
+    public BigDecimal getGeneralGross() {
+        return generalGross;
+    }
+
+    public BigDecimal getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public BigDecimal getCardDiscount() {
+        return cardDiscount;
+    }
+
+    public BigDecimal getPredatedCheckDiscount() {
+        return predatedCheckDiscount;
+    }
+
+    public BigDecimal getCashCheckDiscount() {
+        return cashCheckDiscount;
+    }
+
+    public BigDecimal getVoucherDiscount() {
+        return voucherDiscount;
+    }
+
+    public BigDecimal getOtherDiscount() {
+        return otherDiscount;
+    }
+
+    public BigDecimal getNetTotal() {
+        return netTotal;
+    }
+
+    public BigDecimal getFinalBalance() {
+        return finalBalance;
+    }
+
+    public Long getPatientCount() {
+        return patientCount;
+    }
+
+    public Long getMoldingCount() {
+        return moldingCount;
+    }
+
+    public Long getBiteCount() {
+        return biteCount;
+    }
+
+    public Long getFittingCount() {
+        return fittingCount;
+    }
+
+    public Long getDeliveryCount() {
+        return deliveryCount;
+    }
+
+    public Long getRepetitionCount() {
+        return repetitionCount;
+    }
 }

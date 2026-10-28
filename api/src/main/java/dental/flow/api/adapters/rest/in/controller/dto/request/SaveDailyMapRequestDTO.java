@@ -25,10 +25,17 @@ public record SaveDailyMapRequestDTO(
     public record VisitInput(Long appointmentId, Long patientId, Long procedureId, Integer lineNumber,
                              String recordNumber, String patientName, LocalTime scheduledTime,
                              LocalTime entryTime, LocalTime exitTime, LocalTime returnTime,
-                             String paymentCode, BigDecimal value, String type, Boolean checked) {}
+                             String paymentCode, BigDecimal value, String type, Boolean checked) {
+    }
+
     public record VoucherInput(String responsibleName, String recordNumber, BigDecimal value,
-                               String description, Boolean checked) {}
-    public record ExpenseInput(String description, BigDecimal value) {}
+                               String description, Boolean checked) {
+    }
+
+    public record ExpenseInput(String description, BigDecimal value) {
+    }
+
     public record TeamScheduleInput(Long userId, String employeeName, String role, LocalTime startTime,
-                                    LocalTime lunchOutTime, LocalTime lunchReturnTime, LocalTime endTime) {}
+                                    LocalTime lunchOutTime, LocalTime lunchReturnTime, LocalTime endTime) {
+    }
 }

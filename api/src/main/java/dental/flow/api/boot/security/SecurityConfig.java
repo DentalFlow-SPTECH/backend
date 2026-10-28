@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/auth/me").authenticated()
                         .requestMatchers(HttpMethod.POST, "/user").hasRole("DENTISTA")
                         .requestMatchers("/dashboard/**").hasRole("DENTISTA")

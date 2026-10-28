@@ -13,7 +13,7 @@ public record DashboardAlertResponseDTO(
         BigDecimal threshold
 ) {
     public static List<DashboardAlertResponseDTO> evaluate(MonthlyDashboardSummaryResponseDTO summary,
-                                                            DashboardKpiResponseDTO kpis) {
+                                                           DashboardKpiResponseDTO kpis) {
         List<DashboardAlertResponseDTO> alerts = new ArrayList<>();
         if (kpis.operatingDays() == 0) {
             alerts.add(new DashboardAlertResponseDTO("NO_FINANCIAL_DATA", "INFO", "Sem mapa diário",

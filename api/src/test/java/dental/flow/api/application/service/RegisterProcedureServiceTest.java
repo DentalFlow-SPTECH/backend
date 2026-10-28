@@ -21,8 +21,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterProcedureServiceTest {
-    @Mock private RegisterProcedureRepository repository;
-    @InjectMocks private RegisterProcedureService service;
+    @Mock
+    private RegisterProcedureRepository repository;
+    @InjectMocks
+    private RegisterProcedureService service;
 
     @Test
     void shouldCoverProcedureHappyFlows() {
